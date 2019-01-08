@@ -1,0 +1,20 @@
+{#
+Extend the sitefarm_one file of the same name. You will need to specifically
+target the sitefarm_one theme so that it doesn't create a reference to try and
+extend this file.
+
+https://twig.symfony.com/doc/2.x/tags/extends.html
+#}
+{% extends "@sitefarm_one/block/block--search-popup.html.twig" %}
+
+{# Override the "content" twig block. #}
+{% block content %}
+  {# Add some custom markup here. #}
+  <div class="search-override">
+    {# Be sure that the text can be translated. #}
+    {% trans %}My new custom text goes here{% endtrans %}
+  </div>
+
+  {# Print out the content from the parent template. #}
+  {{ content }}
+{% endblock %}
