@@ -1,0 +1,12 @@
+# Dependency directories
+bower_components
+node_modules
+
+# Ignore map files since they only work locally anyway
+*.map
+
+# Node will sometimes create a log file on failures
+*.log
+
+# Custom Local config
+gulp-config--custom.yml
