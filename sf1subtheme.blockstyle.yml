@@ -1,0 +1,12 @@
+# Block style plugins documentation https://www.drupal.org/docs/8/modules/block-style-plugins
+# Allow editors to add custom classes to a block.
+custom_class:
+  label: "Custom CSS Class"
+  # Add form fields options https://www.drupal.org/docs/8/api/form-api.
+  form:
+    # Create a form field.
+    'css_class':
+      # Add properties to this field.
+      '#type': 'textfield'
+      '#title': 'Add a custom class to this block'
+      '#description': 'Do not add the "period" to the start of the class'
