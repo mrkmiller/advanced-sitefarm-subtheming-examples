@@ -5,53 +5,44 @@
  * Functions to support theming in the SiteFarm One subtheme.
  */
 
-/**
- * Implements hook_preprocess_html() for html.html.twig.
- */
-function sf1subtheme_preprocess_html(array &$variables) {
-  // Add class to html tag
-
-//  $variables['html_attributes']->addClass('no-js');
-}
-
-/**
- * Implements hook_preprocess_page() for page.html.twig.
- */
-function sf1subtheme_preprocess_page(array &$variables) {
-  // Remove content top margin on the front page
-
-//  if ($variables['is_front'] == TRUE) {
-//    $variables['top_margin'] = FALSE;
-//  }
-}
+use Drupal\Core\Url;
 
 /**
  * Implements hook_preprocess_block() for block.html.twig.
  */
 function sf1subtheme_preprocess_block(array &$variables) {
-  // Add a custom class to a block
+  // Force the title of the sub menu block to always link to its parent page.
+  // Only apply this to a specific block.
+  if ($variables['plugin_id'] == 'system_menu_block:main') {
+    // Get the current route parameters.
+    /** @var \Drupal\Core\Routing\CurrentRouteMatch $route_match */
+    $route_match = \Drupal::service('current_route_match');
+    $route_name = $route_match->getRouteName();
+    $route_parameters = $route_match->getRawParameters()->all();
 
-//  $variables['attributes']['class'][] = 'my-custom-class';
-}
+    // Get the menu link manager service from core.
+    /** @var \Drupal\Core\Menu\MenuLinkManager $menu_link_manager */
+    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+    $links = $menu_link_manager->loadLinksByRoute($route_name, $route_parameters);
 
-/**
- * Implements hook_preprocess_node() for node.html.twig.
- */
-function sf1subtheme_preprocess_node(array &$variables) {
-  // Add a class to all Teaser view modes
+    // Set up defaults to go to the Home page if there is no parent.
+    $title = t('Home');
+    $url = Url::fromRoute('<front>');
 
-//  if ($variables['view_mode'] == 'teaser') {
-//    $variables['attributes']['class'][] = 'my-custom-class';
-//  }
-}
+    // If there is a parent to the current page then add that link.
+    if ($link = reset($links)) {
+      if ($parent = $link->getParent()) {
+        /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $parent */
+        $parent = $menu_link_manager->createInstance($parent);
+        $title = $parent->getTitle();
+        $url = $parent->getUrlObject();
+      }
+    }
 
-/**
- * Implements hook_theme_suggestions_node_alter().
- */
-function sf1subtheme_theme_suggestions_node_alter(array &$suggestions, array $variables) {
-  // Use a custom template for all node teasers
-
-//  if ($variables['elements']['#view_mode'] == "teaser") {
-//    $suggestions[] = 'custom_template_name';
-//  }
+    // Add the title and url to the theme variables.
+    $variables['parent_title'] = $title;
+    $variables['parent_url'] = $url->toString();
+    // Force the link to be shown.
+    $variables['show_parent_link'] = TRUE;
+  }
 }
