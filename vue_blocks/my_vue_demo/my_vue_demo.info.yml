@@ -1,0 +1,18 @@
+# https://www.drupal.org/docs/8/modules/decoupled-blocks-vuejs/getting-started
+name: My Vue Demo
+# machine-name will be the class that you bind the Vue instance to.
+machine_name: my-vue-demo
+type: pdb
+description: 'Demo of a PDB Vue block'
+package: Vue
+core: '8.x'
+module_status: active
+presentation: vue
+template: template.html
+add_js:
+  footer:
+    'script.js': {}
+add_css:
+  header:
+    component:
+      'styles.css': {}
