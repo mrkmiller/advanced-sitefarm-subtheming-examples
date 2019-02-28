@@ -16,3 +16,6 @@ add_css:
   header:
     component:
       'styles.css': {}
+libraries:
+  - core/jquery
+  - sf1subtheme/jsonapi-parse

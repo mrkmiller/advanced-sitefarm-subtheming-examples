@@ -1,4 +1,48 @@
-<div class="test">
-  <p>This is using a Template file.</p>
-  <p>{{ message }}</p>
-</div>
+<article v-for="person in people" :key="person.id" class="o-media vm-teaser">
+  <div v-if="person.field_sf_primary_image" class="o-media__figure vm-teaser__figure vm-teaser__figure--boxed category category-brand__thumbnail">
+    <a :href="person.path.alias">
+      <img :src="person.field_sf_primary_image.url" :alt="person.field_sf_primary_image.meta.alt" />
+    </a>
+  </div>
+  <div class="o-media__body">
+    <h3 class="vm-teaser__title"><a :href="person.path.alias">{{ person.title }}</a></h3>
+
+    <ul v-if="person.field_sf_position_title || person.field_sf_unit" class="vm-teaser__position">
+      <li><b>{{ person.field_sf_position_title }}</b></li>
+      <li v-for="unit in person.field_sf_unit">{{ unit }}</li>
+    </ul>
+
+    <div v-if="person.body" v-html="person.body.summary" class="vm-teaser__summary"></div>
+
+    <ul class="vm-teaser__contact list--pipe text--smaller">
+      <li v-if="person.field_sf_phone_numbers" v-for="phone in person.field_sf_phone_numbers">
+        <a class="icon icon--link icon--phone">{{ phone }}</a>
+      </li>
+      <li v-if="person.field_sf_emails" v-for="email in person.field_sf_emails">
+        <a class="icon icon--link icon--envelope" :href="'mailto:' + email">{{ email }}</a>
+      </li>
+      <li v-if="person.field_sf_websites" v-for="website in person.field_sf_websites">
+        <a v-if="website.title" class="icon icon--link icon--web" :href="website.uri">{{ website.title }}</a>
+        <a v-else-if="website.uri" class="icon icon--link icon--web" :href="website.uri">{{ website.uri }}</a>
+      </li>
+      <li>
+        <a :href="person.path.alias" class="icon icon--link icon--view-more">View Listing</a>
+      </li>
+    </ul>
+
+    <div v-if="person.field_sf_office_location" class="icon icon--location">{{ person.field_sf_office_location }}</div>
+
+    <address v-if="person.field_sf_address" class="icon icon--map u-space-bottom--small">
+      <template v-if="person.field_sf_address.organization">{{ person.field_sf_address.organization }},</template>
+      {{ person.field_sf_address.address_line1 }}
+      {{ person.field_sf_address.address_line2 }}
+      {{ person.field_sf_address.locality }},
+      {{ person.field_sf_address.administrative_area }}
+      {{ person.field_sf_address.postal_code }}
+      <template v-if="person.field_sf_address.country_code !== 'US'">{{ person.field_sf_address.country_code }}</template>
+    </address>
+
+    <div v-if="person.field_sf_office_hours" class="text--smaller"><strong>Office Hours</strong> {{ person.field_sf_office_hours }}</div>
+
+  </div>
+</article>

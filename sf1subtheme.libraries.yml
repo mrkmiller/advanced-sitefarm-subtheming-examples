@@ -5,3 +5,8 @@ global-styles:
       css/style.css: {}
   js:
     js/scripts.js: {}
+
+jsonapi-parse:
+  version: 2.0.0
+  js:
+    js/jsonapi.min.js: { minified: true }
